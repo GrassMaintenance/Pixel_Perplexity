@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b4a90d7a25e5a466f9c972e98eafd199
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - floorSprite: {instanceID: 0}
+  - roofSprite: {instanceID: 0}
+  - wallSprite: {instanceID: 0}
+  - wallCornerSprite: {instanceID: 0}
+  - mazeSpritePrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
