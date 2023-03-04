@@ -3,8 +3,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class MazeRunner : MonoBehaviour {
-
-    [SerializeField] private Timer timer;
     private readonly float walkSpeed = 4;
     private readonly float rotateSpeed = 4;
     private PlayerControls playerControls;
@@ -18,7 +16,6 @@ public class MazeRunner : MonoBehaviour {
     // float lastAngle;
 
     private void Awake() => playerControls = new PlayerControls();
-    private void Start() => timer.SetTimer(() => print("Timer Complete!"), 1f);
     private void OnEnable() => playerControls.Enable();
     private void OnDisable() => playerControls.Disable();
 
