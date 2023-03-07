@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MazeKey : MonoBehaviour {
+namespace Maze {
+    public class MazeKey : MonoBehaviour {
 
-    void OnTriggerEnter2D() {
-        transform.parent.SendMessage("OnKeyFound", SendMessageOptions.DontRequireReceiver);
-        GameObject.Destroy(gameObject);
+        void OnTriggerEnter2D() {
+            transform.parent.SendMessage("OnKeyFound", SendMessageOptions.DontRequireReceiver);
+            GameObject.Destroy(gameObject);
+        }
+
     }
-
 }
