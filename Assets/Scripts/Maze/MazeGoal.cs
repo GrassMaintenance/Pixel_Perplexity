@@ -9,8 +9,8 @@ namespace Maze {
 
         void Start() {
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            if (spriteRenderer != null) {
-                spriteRenderer.sprite = closedGoalSprite;
+             if (spriteRenderer != null) {
+                 spriteRenderer.sprite = closedGoalSprite;
             }
         }
 

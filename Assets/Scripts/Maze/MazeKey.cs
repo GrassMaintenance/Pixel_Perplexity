@@ -7,6 +7,5 @@ namespace Maze {
             transform.parent.SendMessage("OnKeyFound", SendMessageOptions.DontRequireReceiver);
             GameObject.Destroy(gameObject);
         }
-
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace PixelPerplexity.Player {
@@ -5,6 +6,7 @@ namespace PixelPerplexity.Player {
         private readonly float walkSpeed = 4;
         private readonly float rotateSpeed = 4;
         private PlayerControls playerControls;
+        public event Action OnPlayerPaused;
         // public Transform rotationTransform;
         // Vector2 direction = Vector2.zero;
         // int targetX = 1;
@@ -37,10 +39,13 @@ namespace PixelPerplexity.Player {
             // rotationTransform.rotation = Quaternion.Euler(Vector3.up * currentAngle);
             // lastAngle = angle;
             Vector2 playerInput = playerControls.Player.WASD.ReadValue<Vector2>();
+            playerControls.Player.Pause.performed += _ => InvokePauseEvent();
             MovePlayer(playerInput);
             RotatePlayer(playerInput);
         }
 
+        void InvokePauseEvent() => OnPlayerPaused?.Invoke();
+        
         void RotatePlayer(Vector2 input) {
 
             if (input == Vector2.zero) return;
