@@ -1,21 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMovement : MonoBehaviour
-{
-    [SerializeField] private Transform mazeRunner;
-    private Camera camera;
-    private const float CameraDistance = 0.5f;
+public class CameraMovement : MonoBehaviour {
+    [SerializeField] private Transform target;
 
-    // Initialize the camera component
-    private void Start()
-    {
-        camera = Camera.main;
+    public float smoothTime = 0.3f;
+    private Vector3 velocity = Vector3.zero;
+    private Camera mainCamera;
+
+    void Start() {
+        mainCamera = GetComponent<Camera>();
     }
 
-    // Update the camera position to follow the maze runner
-    private void Update()
-    {
-        Vector3 cameraPosition = new Vector3(mazeRunner.position.x, mazeRunner.position.y, mazeRunner.position.z - CameraDistance);
-        camera.transform.position = cameraPosition;
+    void LateUpdate() {
+        if (target) {
+            Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+        }
     }
 }

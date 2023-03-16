@@ -1,20 +1,25 @@
 using System;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
-public class Timer : MonoBehaviour {
-    private float seconds;
-    private Action action;
-    
-    public void SetTimer(Action action, float seconds) {
-        this.action = action;
-        this.seconds = seconds;
-    }
-    
-    void Update() {
-        if (seconds > 0) seconds -= Time.deltaTime;
-        if (IsTimerComplete()) action();
+public class Timer : MonoBehaviour
+{
+    private float _seconds;
+    private Action _action;
+    public void SetTimer(Action action, float seconds)
+    {
+        _action = action;
+        _seconds = seconds;
     }
 
-    private bool IsTimerComplete() => seconds <= 0;
+    private void Update()
+    {
+        if (_seconds > 0) _seconds -= Time.deltaTime;
+        if (IsTimerComplete())
+        {
+            _action?.Invoke();
+            _action = null; // Prevent the action from being called multiple times
+        }
+    }
+
+    private bool IsTimerComplete() => _seconds <= 0;
 }
