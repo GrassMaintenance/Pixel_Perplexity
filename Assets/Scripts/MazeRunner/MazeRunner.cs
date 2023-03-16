@@ -10,16 +10,28 @@ namespace PixelPerplexity.Player
         private PlayerControls playerControls;
         public event Action OnPlayerPaused;
 
-        private void Awake() => playerControls = new PlayerControls();
+        private Rigidbody2D rb2d;
+        private Vector2 moveInput;
+
+        private void Awake()
+        {
+            playerControls = new PlayerControls();
+            rb2d = GetComponent<Rigidbody2D>();
+        }
+
         private void OnEnable() => playerControls.Enable();
         private void OnDisable() => playerControls.Disable();
 
         private void Update()
         {
-            Vector2 playerInput = playerControls.Player.WASD.ReadValue<Vector2>();
+            moveInput = playerControls.Player.WASD.ReadValue<Vector2>();
             playerControls.Player.Pause.performed += _ => InvokePauseEvent();
-            MovePlayer(playerInput);
-            RotatePlayer(playerInput);
+            RotatePlayer(moveInput);
+        }
+
+        private void FixedUpdate()
+        {
+            MovePlayer(moveInput);
         }
 
         private void InvokePauseEvent() => OnPlayerPaused?.Invoke();
@@ -35,8 +47,8 @@ namespace PixelPerplexity.Player
 
         private void MovePlayer(Vector2 input)
         {
-            Vector3 movement = new Vector3(input.x, input.y, 0).normalized;
-            transform.Translate(walkSpeed * Time.deltaTime * movement, Space.World);
+            Vector2 movement = input.normalized * walkSpeed;
+            rb2d.velocity = movement;
         }
     }
 }
