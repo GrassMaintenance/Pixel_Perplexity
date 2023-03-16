@@ -6,28 +6,28 @@ namespace Maze {
         int width;
         int height;
         bool[,] grid;
-        System.Random rg;
+        System.Random random;
         int startX;
         int startY;
 
-        public bool[,] Grid { get { return grid; } }
+        public bool[,] Grid => grid;
 
-        public Maze(int width, int height, System.Random rg)
+        public Maze(int width, int height, System.Random random)
         {
             this.width = width;
             this.height = height;
             this.startX = 1;
             this.startY = 1;
-            this.rg = rg;
+            this.random = random;
         }
 
-        public Maze(int width, int height, int startX, int startY, System.Random rg)
+        public Maze(int width, int height, int startX, int startY, System.Random random)
         {
             this.width = width;
             this.height = height;
             this.startX = startX;
             this.startY = startY;
-            this.rg = rg;
+            this.random = random;
         }
 
         public void Generate()
@@ -37,7 +37,7 @@ namespace Maze {
             MazeDigger(startX, startY);
         }
 
-        public Vector3 GetGoalPosition()
+                public Vector3 GetGoalPosition()
         {
             int radius = 2;
             int endX = width - startX;
@@ -48,12 +48,13 @@ namespace Maze {
                 {
                     if (GetCell(x, y))
                     {
-                        return new Vector3(x, y);
+                        return new Vector3(x, y, 0);
                     }
                 }
             }
-            return Vector3.one * 1000;
+            return new Vector3(1000, 1000, 0);
         }
+
 
         public bool GetCell(int x, int y)
         {
@@ -66,35 +67,35 @@ namespace Maze {
 
         void MazeDigger(int x, int y)
         {
-            int[] directions = new int[] { 1, 2, 3, 4 };
-            Tools.Shuffle(directions, rg);
+            Direction[] directions = (Direction[]) System.Enum.GetValues(typeof(Direction));
+            Tools.Shuffle(directions, random);
 
             foreach (var direction in directions)
             {
                 switch (direction)
                 {
-                    case 1:
+                    case Direction.Up:
                         if (y - 2 <= 0) continue;
                         if (grid[x, y - 2]) continue;
                         grid[x, y - 2] = true;
                         grid[x, y - 1] = true;
                         MazeDigger(x, y - 2);
                         break;
-                    case 2:
+                    case Direction.Left:
                         if (x - 2 <= 0) continue;
                         if (grid[x - 2, y]) continue;
                         grid[x - 2, y] = true;
                         grid[x - 1, y] = true;
                         MazeDigger(x - 2, y);
                         break;
-                    case 3:
+                    case Direction.Right:
                         if (x + 2 >= width - 1) continue;
                         if (grid[x + 2, y]) continue;
                         grid[x + 2, y] = true;
                         grid[x + 1, y] = true;
                         MazeDigger(x + 2, y);
                         break;
-                    case 4:
+                    case Direction.Down:
                         if (y + 2 >= height - 1) continue;
                         if (grid[x, y + 2]) continue;
                         grid[x, y + 2] = true;
@@ -104,6 +105,12 @@ namespace Maze {
                 }
             }
         }
+        enum Direction
+        {
+            Up = 1,
+            Left = 2,
+            Down = 3,
+            Right = 4
+        }
     }
 }
-

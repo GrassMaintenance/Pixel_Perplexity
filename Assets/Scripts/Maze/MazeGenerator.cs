@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Maze {
+    [RequireComponent(typeof(Maze))]
     public class MazeGenerator : MonoBehaviour
     {
         public static MazeGenerator instance;
@@ -108,56 +109,52 @@ namespace Maze {
                 CreateMazeSprite(position, wallCornerSprite, transform, 1, 180);
             }
 
-            if (bottom)
-            {
-                CreateMazeSprite(position, wallSprite, transform, 1, 90);
-            }
-
             if (!left && !bottom && x > 0 && y > 0)
             {
                 CreateMazeSprite(position, wallCornerSprite, transform, 1, 90);
             }
-
-            if (left)
-            {
-                CreateMazeSprite(position, wallSprite, transform, 1, 0);
-            }
-        }
-        public bool GetMazeGridCell(int x, int y)
-        {
-            return maze.GetCell(x, y);
         }
 
-        public List<Vector3> GetRandomFloorPositions(int count) {
-            List<Vector3> positions = new List<Vector3>();
 
-            for(int i = 0; i < count; i++) {
-                Vector3 position = Vector3.one;
-
-                do {
-                    int posX = 0;
-                    int posY = 0;
-
-                    while(!GetMazeGridCell(posX, posY)) {
-                        posX = mazeRG.Next(3, mazeWidth);
-                        posY = mazeRG.Next(3, mazeHeight);
-                    }
-
-                    position = new Vector3(posX, posY);
-                } while(positions.Contains(position));
-
-                positions.Add(position);
-            }
-
-            return positions;
-        }
-
-        void CreateMazeSprite(Vector3 position, Sprite sprite, Transform parent, int sortingOrder, float rotation)
-        {
-            MazeSprite mazeSprite = Instantiate(mazeSpritePrefab, position, Quaternion.identity) as MazeSprite;
-            mazeSprite.SetSprite(sprite, sortingOrder);
-            mazeSprite.transform.SetParent(parent);
-            mazeSprite.transform.Rotate(0, 0, rotation);
-        }
+    public bool GetMazeGridCell(int x, int y)
+    {
+        return maze.GetCell(x, y);
     }
+
+    public List<Vector3> GetRandomFloorPositions(int count)
+    {
+        List<Vector3> positions = new List<Vector3>();
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 position = Vector3.one;
+
+            do
+            {
+                int posX = 0;
+                int posY = 0;
+
+                while (!GetMazeGridCell(posX, posY))
+                {
+                    posX = mazeRG.Next(3, mazeWidth);
+                    posY = mazeRG.Next(3, mazeHeight);
+                }
+
+                position = new Vector3(posX, posY);
+            } while (positions.Contains(position));
+
+            positions.Add(position);
+        }
+
+        return positions;
+    }
+
+    void CreateMazeSprite(Vector3 position, Sprite sprite, Transform parent, int sortingOrder, float rotation)
+    {
+        var mazeSprite = Instantiate(mazeSpritePrefab, position, Quaternion.identity);
+        mazeSprite.SetSprite(sprite, sortingOrder);
+        mazeSprite.transform.SetParent(parent);
+        mazeSprite.transform.Rotate(0, 0, rotation);
+    }
+}
 }

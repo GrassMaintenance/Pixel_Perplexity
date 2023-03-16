@@ -3,67 +3,62 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Maze {
-    public class MazeDirectives : MonoBehaviour {
+    public class MazeObjectives : MonoBehaviour {
 
         public int keysToFind;
-
         public Text keysValueText;
 
         public MazeGoal mazeGoalPrefab;
         public MazeKey mazeKeyPrefab;
 
-        MazeGoal mazeGoal;
+        private MazeGoal mazeGoal;
+        private int foundKeys;
+        private List<Vector3> mazeKeyPositions;
+        private MazeGenerator mazeGenerator;
 
-        int foundKeys;
-
-        List<Vector3> mazeKeyPositions;
-
-        MazeGenerator mazeGenerator;
-
-        void Awake() {
-            MazeGenerator.OnMazeReady += StartDirectives;
+        private void OnEnable() {
+            MazeGenerator.OnMazeReady += StartObjectives;
         }
 
-        void Start() {
+        private void OnDisable() {
+            MazeGenerator.OnMazeReady -= StartObjectives;
+        }
+
+        private void Start() {
             SetKeyValueText();
-            keysValueText.text = foundKeys.ToString() + " of " + keysToFind.ToString();
         }
 
-
-        void StartDirectives() {
+        private void StartObjectives() {
             mazeGenerator = MazeGenerator.instance;
-
-            mazeGoal = Instantiate(mazeGoalPrefab, mazeGenerator.mazeGoalPosition, Quaternion.identity) as MazeGoal;
+            mazeGoal = Instantiate(mazeGoalPrefab, mazeGenerator.mazeGoalPosition, Quaternion.identity);
             mazeGoal.transform.SetParent(transform);
 
             mazeKeyPositions = mazeGenerator.GetRandomFloorPositions(keysToFind);
 
-            for(int i = 0; i < mazeKeyPositions.Count; i++) {
-                MazeKey mazeKey = Instantiate(mazeKeyPrefab, mazeKeyPositions[i], Quaternion.identity) as MazeKey;
+            foreach (var position in mazeKeyPositions) {
+                var mazeKey = Instantiate(mazeKeyPrefab, position, Quaternion.identity);
                 mazeKey.transform.SetParent(transform);
             }
         }
 
         public void OnGoalReached() {
             Debug.Log("Goal Reached");
-            if(foundKeys == keysToFind) {
+            if (foundKeys == keysToFind) {
                 Debug.Log("Escape the maze");
             }
         }
 
         public void OnKeyFound() {
             foundKeys++;
-
             SetKeyValueText();
 
-            if(foundKeys == keysToFind) {
+            if (foundKeys == keysToFind) {
                 GetComponentInChildren<MazeGoal>().OpenGoal();
             }
         }
 
-        void SetKeyValueText() {
-            keysValueText.text = foundKeys.ToString() + " of " + keysToFind.ToString();
+        private void SetKeyValueText() {
+            keysValueText.text = $"{foundKeys} of {keysToFind}";
         }
-
     }
 }
